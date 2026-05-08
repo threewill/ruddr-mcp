@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Generate types
+        run: npm run gen:types
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Integration tests (if RUDDR_API_KEY secret exists)
+        if: ${{ secrets.RUDDR_API_KEY != '' }}
+        env:
+          RUDDR_API_KEY: ${{ secrets.RUDDR_API_KEY }}
+        run: npm run test:integration
+
