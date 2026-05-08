@@ -12,3 +12,12 @@ export function ruddrBaseUrl(): string {
   return process.env.RUDDR_BASE_URL ?? "https://www.ruddr.io/api/workspace";
 }
 
+export function isWriteEnabled(area: "time_entries"): boolean {
+  const raw = process.env.RUDDR_ALLOW_WRITES ?? "";
+  const enabled = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return enabled.includes(area);
+}
+

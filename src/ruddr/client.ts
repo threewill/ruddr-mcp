@@ -32,6 +32,18 @@ export class RuddrClient {
     );
   }
 
+  async post<T>(path: string, body: unknown): Promise<T> {
+    return this.request<T>(path, { method: "POST", body });
+  }
+
+  async patch<T>(path: string, body: unknown): Promise<T> {
+    return this.request<T>(path, { method: "PATCH", body });
+  }
+
+  async delete(path: string): Promise<void> {
+    await this.request<void>(path, { method: "DELETE" });
+  }
+
   private async request<T>(
     path: string,
     options: RuddrRequestOptions
@@ -75,7 +87,17 @@ export class RuddrClient {
         );
       }
 
-      // Ruddr always returns JSON for these endpoints.
+      if (res.status === 204) return undefined as T;
+
+      const contentLength = res.headers.get("content-length");
+      if (contentLength === "0") return undefined as T;
+
+      const contentType = res.headers.get("content-type") ?? "";
+      if (!contentType.toLowerCase().includes("application/json")) {
+        const text = await res.text().catch(() => "");
+        return text as T;
+      }
+
       return (await res.json()) as T;
     }
 
