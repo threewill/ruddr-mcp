@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      RUDDR_API_KEY: ${{ secrets.RUDDR_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Generate types
+        run: npm run gen:types
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Integration tests (if RUDDR_API_KEY secret exists)
+        if: ${{ env.RUDDR_API_KEY != '' }}
+        run: npm run test:integration
+
+      - name: Build
+        run: npm run build
+
+      - name: Package zip
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ASSET="ruddr-mcp-v${VERSION}.zip"
+          mkdir -p package/dist
+          cp -r dist package/
+          cp package.json README.md LICENSE ROADMAP.md package/
+          (cd package && zip -r "../${ASSET}" .)
+          echo "ASSET=${ASSET}" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ASSET }}
+          generate_release_notes: true
+
