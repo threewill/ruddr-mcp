@@ -26,6 +26,12 @@ Phase 2 tools (read-only):
 - `ruddr_list_workspace_members`
 - `ruddr_list_timesheets`
 
+Phase 3 tools (time entry writes; gated):
+
+- `ruddr_create_time_entry`
+- `ruddr_update_time_entry`
+- `ruddr_delete_time_entry`
+
 ## Requirements
 
 - Node.js 18+
@@ -59,8 +65,7 @@ After unzipping a release asset (or building locally), configure `%USERPROFILE%\
       "command": "node",
       "args": ["C:\\\\tools\\\\ruddr-mcp\\\\dist\\\\index.js"],
       "env": {
-        "RUDDR_API_KEY": "<your-api-key>",
-        "RUDDR_ALLOW_WRITES": "time_entries"
+        "RUDDR_API_KEY": "<your-api-key>"
       }
     }
   }
@@ -68,6 +73,18 @@ After unzipping a release asset (or building locally), configure `%USERPROFILE%\
 ```
 
 Then **restart Cursor completely** (quit + reopen) so it reloads MCP config.
+
+### Enabling time entry writes (optional)
+
+By default, this server is safe to run in **read-only** mode.
+
+To enable time entry writes, add:
+
+```json
+{
+  "RUDDR_ALLOW_WRITES": "time_entries"
+}
+```
 
 ## Troubleshooting
 
@@ -88,12 +105,16 @@ If tools return an error like “Missing RUDDR_API_KEY”, it means the MCP serv
 
 - `RUDDR_API_KEY` (required): Ruddr API key used as a Bearer token.
 - `RUDDR_BASE_URL` (optional): defaults to `https://www.ruddr.io/api/workspace`.
-- `RUDDR_ALLOW_WRITES` (reserved for Phase 3): write operations are not shipped yet, but this flag will gate time-entry writes when added.
+- `RUDDR_ALLOW_WRITES` (optional): comma-separated list of enabled write areas. To enable time entry writes, set to `time_entries`.
+- `RUDDR_RUN_WRITE_TESTS` (tests only): set to `1` to opt-in to integration tests that create/update/delete time entries.
 
 ## Testing
 
 - Unit tests (offline): `npm test`
 - Integration smoke (requires key): `npm run test:integration`
+- Integration time entry writes (mutates data; opt-in):
+  - `RUDDR_ALLOW_WRITES=time_entries`
+  - `RUDDR_RUN_WRITE_TESTS=1`
 
 In GitHub Actions, integration tests run only when the repo secret `RUDDR_API_KEY` is set.
 
