@@ -24,6 +24,7 @@ Phase 2 tools (read-only):
 - `ruddr_list_holidays`
 - `ruddr_list_opportunity_stages`
 - `ruddr_list_workspace_members`
+- `ruddr_list_allocations` (resource capacity / planning; `GET /allocations`)
 - `ruddr_list_timesheets`
 
 Phase 3 tools (time entry writes; gated):

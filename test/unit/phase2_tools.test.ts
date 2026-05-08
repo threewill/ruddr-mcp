@@ -107,5 +107,13 @@ describe("phase 2 tools (unit)", () => {
     const resp = await callTool("ruddr_list_timesheets", { limit: 1 });
     expect(parseToolJson(resp)).toEqual({ results: [], hasMore: false });
   });
+
+  it("ruddr_list_allocations calls /allocations", async () => {
+    process.env.RUDDR_API_KEY = "test";
+    const fetchMock = mockListEndpoint("/allocations");
+    vi.stubGlobal("fetch", fetchMock as any);
+    const resp = await callTool("ruddr_list_allocations", { limit: 1 });
+    expect(parseToolJson(resp)).toEqual({ results: [], hasMore: false });
+  });
 });
 

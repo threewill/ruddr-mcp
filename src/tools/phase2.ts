@@ -10,6 +10,8 @@ const cursorSchema = {
   endingBefore: z.string().uuid().optional(),
 };
 
+const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+
 export function registerPhase2Tools(server: McpServer) {
   const client = () => new RuddrClient();
 
@@ -85,7 +87,6 @@ export function registerPhase2Tools(server: McpServer) {
   );
 
   // Invoices
-  const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
   const invoicesSchema = z.object({
     ...cursorSchema,
     clientId: z.string().uuid().optional(),
@@ -205,6 +206,30 @@ export function registerPhase2Tools(server: McpServer) {
     async (args) => {
       const input = membersSchema.parse(args);
       return jsonResponse(await client().list("/members", input));
+    }
+  );
+
+  // Allocations (resource capacity / planning; Ruddr API GET /allocations)
+  const allocationsSchema = z.object({
+    ...cursorSchema,
+    assignmentTypeId: z.enum(["project", "time_off"]).optional(),
+    memberId: z.string().uuid().optional(),
+    startBefore: dateSchema.optional(),
+    startOnBefore: dateSchema.optional(),
+    endAfter: dateSchema.optional(),
+    endOnAfter: dateSchema.optional(),
+  });
+  server.registerTool(
+    "ruddr_list_allocations",
+    {
+      title: "Ruddr List Allocations",
+      description:
+        "List allocations (resource capacity planning): hours assigned per member per project or time off, with optional filters on assignment type, member, and allocation start/end dates (YYYY-MM-DD). Combine date filters to select allocations overlapping a range (e.g. endOnAfter + startOnBefore). Paginated.",
+      inputSchema: allocationsSchema,
+    },
+    async (args) => {
+      const input = allocationsSchema.parse(args);
+      return jsonResponse(await client().list("/allocations", input));
     }
   );
 
