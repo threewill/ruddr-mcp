@@ -11,6 +11,21 @@ Phase 1 tools:
 - `ruddr_list_time_entries`
 - `ruddr_get_time_entry`
 
+Phase 2 tools (read-only):
+
+- `ruddr_list_project_members`
+- `ruddr_list_project_tasks`
+- `ruddr_list_project_expenses`
+- `ruddr_list_project_budget_expenses`
+- `ruddr_list_invoices`
+- `ruddr_list_expense_categories`
+- `ruddr_list_expense_reports`
+- `ruddr_list_expense_items`
+- `ruddr_list_holidays`
+- `ruddr_list_opportunity_stages`
+- `ruddr_list_workspace_members`
+- `ruddr_list_timesheets`
+
 ## Requirements
 
 - Node.js 18+
@@ -53,6 +68,21 @@ After unzipping a release asset (or building locally), configure `%USERPROFILE%\
 ```
 
 Then **restart Cursor completely** (quit + reopen) so it reloads MCP config.
+
+## Troubleshooting
+
+### “Missing RUDDR_API_KEY”
+
+If tools return an error like “Missing RUDDR_API_KEY”, it means the MCP server process was started without the env var.
+
+- Verify `RUDDR_API_KEY` is present in the `env` block for the `ruddr` server in `%USERPROFILE%\\.cursor\\mcp.json` (or that `${env:RUDDR_API_KEY}` resolves in the Cursor process environment).
+- Quit Cursor completely and reopen it (MCP config/env is read at server spawn time).
+
+### Tools don’t show up in Cursor
+
+- Quit Cursor completely and reopen it (closing the window is not enough).
+- Confirm `dist/index.js` exists at the path you configured.
+- Ensure your `mcp.json` is valid JSON (no trailing commas).
 
 ## Environment variables
 

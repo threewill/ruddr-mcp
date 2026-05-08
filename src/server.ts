@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { registerClientTools } from "./tools/clients.js";
 import { registerProjectTools } from "./tools/projects.js";
 import { registerTimeEntryTools } from "./tools/timeEntries.js";
+import { registerPhase2Tools } from "./tools/phase2.js";
 
 export function createServer() {
   const server = new McpServer({
@@ -13,6 +14,7 @@ export function createServer() {
   registerClientTools(server);
   registerProjectTools(server);
   registerTimeEntryTools(server);
+  registerPhase2Tools(server);
 
   return server;
 }
