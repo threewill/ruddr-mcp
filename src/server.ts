@@ -9,7 +9,7 @@ import { registerTimeEntryWriteTools } from "./tools/timeEntryWrites.js";
 export function createServer() {
   const server = new McpServer({
     name: "ruddr-mcp",
-    version: "0.1.0",
+    version: "0.3.0",
   });
 
   registerClientTools(server);

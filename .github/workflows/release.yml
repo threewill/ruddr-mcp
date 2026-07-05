@@ -48,7 +48,7 @@ jobs:
           ASSET="ruddr-mcp-v${VERSION}.zip"
           mkdir -p package/dist
           cp -r dist package/
-          cp package.json README.md LICENSE ROADMAP.md package/
+          cp package.json README.md LICENSE ROADMAP.md CHANGELOG.md SECURITY.md package/
           (cd package && zip -r "../${ASSET}" .)
           echo "ASSET=${ASSET}" >> $GITHUB_ENV
 

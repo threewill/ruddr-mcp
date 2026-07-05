@@ -1,6 +1,17 @@
 # Ruddr MCP Server
 
-This repo contains a **stdio MCP server** that wraps the **Ruddr REST API** so Cursor (and other MCP clients) can query Ruddr workspace data.
+This repo contains a **stdio MCP server** that wraps the **[Ruddr REST API](https://docs.ruddr.io/)** so Cursor, Claude Desktop, and other MCP clients can query Ruddr workspace data.
+
+> **Disclaimer:** This is an unofficial community integration. It is not affiliated with, endorsed by, or supported by Ruddr. You need your own Ruddr workspace and API key. “Ruddr” is a trademark of its respective owner.
+
+## Why this exists
+
+| | **ruddr-mcp** (this repo) | **MCP Bundles Ruddr** |
+| --- | --- | --- |
+| Hosting | Self-hosted (local stdio) | Hosted remote server |
+| Auth | Your Ruddr API key | OAuth via MCP Bundles |
+| Time entries | Read + optional write | Not included |
+| Writes | Time entries only, gated by env | Read-only |
 
 ## What it provides
 
@@ -75,6 +86,26 @@ After unzipping a release asset (or building locally), configure `%USERPROFILE%\
 
 Then **restart Cursor completely** (quit + reopen) so it reloads MCP config.
 
+## Claude Desktop setup
+
+Add to your Claude Desktop MCP config (path varies by OS):
+
+```json
+{
+  "mcpServers": {
+    "ruddr": {
+      "command": "node",
+      "args": ["/path/to/ruddr-mcp/dist/index.js"],
+      "env": {
+        "RUDDR_API_KEY": "<your-api-key>"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Desktop after editing the config.
+
 ### Enabling time entry writes (optional)
 
 By default, this server is safe to run in **read-only** mode.
@@ -102,6 +133,11 @@ If tools return an error like “Missing RUDDR_API_KEY”, it means the MCP serv
 - Confirm `dist/index.js` exists at the path you configured.
 - Ensure your `mcp.json` is valid JSON (no trailing commas).
 
+## Security
+
+- Never commit your `RUDDR_API_KEY`. Keep it in the MCP `env` block or OS environment only.
+- Write tools are off by default. See [SECURITY.md](SECURITY.md) for the full policy.
+
 ## Environment variables
 
 - `RUDDR_API_KEY` (required): Ruddr API key used as a Bearer token.
@@ -122,4 +158,8 @@ In GitHub Actions, integration tests run only when the repo secret `RUDDR_API_KE
 ## Release
 
 Tagging `vX.Y.Z` triggers `.github/workflows/release.yml` and publishes a zip asset `ruddr-mcp-vX.Y.Z.zip`.
+
+## License
+
+[MIT](LICENSE) — Copyright (c) ThreeWill
 
