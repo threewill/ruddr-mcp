@@ -18,7 +18,7 @@ The server is a single Node.js process launched by the MCP client. Types are gen
 
 ## An Elevator Pitch
 
-Ruddr MCP Server is a self-hosted MCP server for the Ruddr PSA API. Install the release, point Cursor or Claude Desktop at it with your own API key, and get twenty tools for workspace reads plus optional, opt-in time-entry writes.
+Ruddr MCP Server is a self-hosted MCP server for the Ruddr PSA API. Install the release, point Cursor or Claude Desktop at it with your own API key, and get twenty tools, including opt-in time-entry writes.
 
 ---
 

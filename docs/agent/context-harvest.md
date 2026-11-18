@@ -173,7 +173,7 @@ Checked 18 Nov 2026 against `src/`, `package.json`, workflows, README, SECURITY,
 
 | Draft claim | Code / git |
 | --- | --- |
-| Twenty tools | **20** `registerTool` names (17 read + 3 gated write). The elevator pitch’s “twenty tools for workspace reads plus … writes” is easy to misread as 20 reads; the real split is 17+3. |
+| Twenty tools | **20** `registerTool` names (17 read + 3 gated write). Chosen elevator pitch: “twenty tools, including opt-in time-entry writes.” |
 | Write tool descriptions tell the agent to confirm with the user first | Descriptions only require `RUDDR_ALLOW_WRITES=time_entries`. There is **no** “confirm with the user” sentence in `timeEntryWrites.ts`. |
 | `ruddr_list_time_entries` filters include `from`/`to`/`statusId` (P-server) | Schema uses `date` / `dateAfter` / `dateOnAfter` / `dateBefore` / `dateOnBefore`, plus `memberId`, `projectId`, `timesheetId`, `typeId`. **No `statusId`.** |
 | Layout `src/client.ts` and per-domain tool files | Client is `src/ruddr/client.ts`. Most Phase 2 reads live in `src/tools/phase2.ts`. |
