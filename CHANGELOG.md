@@ -8,6 +8,7 @@ All notable changes to this project are documented here.
 
 - Gated time entry write tools: `ruddr_create_time_entry`, `ruddr_update_time_entry`, `ruddr_delete_time_entry`.
 - Opt-in via `RUDDR_ALLOW_WRITES=time_entries`.
+- `ruddr_list_allocations` (resource capacity / planning; Ruddr `GET /allocations`). Shipped in PR #4 on 2026-05-08; included in this public tag.
 
 ## [0.2.0]
 
